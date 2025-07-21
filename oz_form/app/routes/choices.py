@@ -4,9 +4,7 @@ from flask import Blueprint, request, jsonify
 
 db = SQLAlchemy()
 
-# 모델 정의
-class Choice(db.Model):
-    __tablename__ = 'choices'
+
 
     id = db.Column(db.Integer, primary_key=True)
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'), nullable=False)
