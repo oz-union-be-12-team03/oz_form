@@ -7,6 +7,7 @@ choice_blp = Blueprint('choice', __name__, url_prefix='/choice')
 
 # POST: 선택지 생성
 @choice_blp.route('/', methods=['POST'])
+
 def create_choice():
     data = request.get_json()
     try:
@@ -26,6 +27,7 @@ def create_choice():
 @choice_blp.route('/question/<int:question_id>', methods=['GET'])
 def get_choice_by_question(question_id):
     choice = Choice.query.filter_by(question_id=question_id).all()
+
     return jsonify([
         {
             "id": c.id,
@@ -34,3 +36,4 @@ def get_choice_by_question(question_id):
             "is_active": c.is_active
         } for c in choice
     ]), 200
+

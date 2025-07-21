@@ -13,11 +13,13 @@ def create_app():
 	db.init_app(application)
 	migrate.init_app(application, db)
 
+
 	@application.errorhandler(400)
 	def handle_bad_request(error):
 		response = jsonify({"message": error.description})
 		response.status_code = 400
 		return response
+
 
 	register_routes(application)
 
