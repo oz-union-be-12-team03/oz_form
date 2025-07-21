@@ -1,11 +1,9 @@
 from flask import Flask, jsonify
 from flask_migrate import Migrate
-
 from app.routes import register_routes
 from config import db
 
 migrate = Migrate()
-
 
 def create_app():
 	application = Flask(__name__)
