@@ -6,6 +6,7 @@ user_blp = Blueprint("users", __name__)
 
 # 사용자 생성
 @user_blp.route("/users", methods=["POST"])
+
 def create_user():
     data = request.get_json()
 

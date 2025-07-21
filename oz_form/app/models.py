@@ -21,7 +21,7 @@ class Answer(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    choice_id = db.Column(db.Integer, db.ForeignKey('choices.id'), nullable=False)
+    choice_id = db.Column(db.Integer, db.ForeignKey('choice.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     
@@ -30,7 +30,7 @@ class Answer(db.Model):
     
 
 class Choice(db.Model):
-    __tablename__ = 'choices'
+    __tablename__ = 'choice'
 
     id = db.Column(db.Integer, primary_key=True)
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'), nullable=False)
@@ -40,7 +40,7 @@ class Choice(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
-    question = db.relationship('Question', back_populates='choices')
+    question = db.relationship('Question', back_populates='choice')
     answers = db.relationship('Answer', back_populates='choice')
     
 class Question(db.Model):
@@ -56,7 +56,7 @@ class Question(db.Model):
 
     # 관계 설정
     image = db.relationship('Image', back_populates='questions')
-    choices = db.relationship('Choice', back_populates='question', lazy=True, cascade='all, delete-orphan')
+    choice = db.relationship('Choice', back_populates='question', lazy=True, cascade='all, delete-orphan')
 
 class Image(db.Model):
     __tablename__ = 'images'

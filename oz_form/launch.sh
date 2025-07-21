@@ -1,5 +1,10 @@
 #!/bin/bash
 
+set -e # 오류 발생 시 즉시 종료
+
+# 스크립트가 실행된 디렉토리로 이동하여 상대 경로 문제를 해결합니다.
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 echo "==== Restarting Nginx ===="
 echo
 

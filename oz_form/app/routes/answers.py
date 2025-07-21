@@ -4,7 +4,7 @@ from app.models import Answer
 
 answers_blp = Blueprint("answer", __name__)
 
-@answers_blp.ruote("/answer", methods=["POST"])
+@answers_blp.route("/answer", methods=["POST"])
 def get_answers():
     try:
         answers = Answer.query.all()
