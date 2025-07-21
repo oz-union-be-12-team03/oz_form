@@ -39,9 +39,8 @@ if [ ! -d "migrations" ]; then
     echo "Initializing migration directory..."
     flask db init
 else
-    echo "Migration directory already exists. Skipping initialization."
+    flask db upgrade
 fi
 flask db migrate
-flask db upgrade
 
 echo "==== Migration Completed ===="
