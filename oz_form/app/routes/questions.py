@@ -1,22 +1,42 @@
+from flask import jsonify, request, Blueprint
+from app.models import Question, Image
+from config import db
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+questions_blp = Blueprint("questions", __name__)
 
-class Question(db.Model):
-    __tablename__ = 'questions'
+# 질문 전체 조회
+@questions_blp.route("/questions", methods=["GET"])
+def get_all_questions():
+    questions = Question.query.order_by(Question.sqe).all()
+    result = []
 
-    id = db.Column(db.Integer, primary_key=True)
-    image_id = db.Column(db.Integer, db.ForeignKey('images.id'), nullable=False)
-    title = db.Column(db.String(100), nullable=False)
-    sqe = db.Column(db.Integer, nullable=False)
-    is_active = db.Column(db.Boolean, default=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    for q in questions:
+        result.append({
+            "id": q.id,
+            "title": q.title,
+            "image_url": q.image.url if q.image else None,
+            "sqe": q.sqe,
+            "is_active": q.is_active,
+            "created_at": q.created_at.isoformat(),
+            "updated_at": q.updated_at.isoformat(),
+        })
 
-    # 관계 설정
-    image = db.relationship('Image', backref=db.backref('questions', lazy=True))
-    choices = db.relationship('Choice', backref='question', lazy=True, cascade='all, delete-orphan')
+    return jsonify({"questions": result}), 200
 
-    def __repr__(self):
-        return f"<Question {self.id} - {self.title[:20]}>"
+# 단일 질문 조회
+@questions_blp.route("/question/<int:question_id>", methods=["GET"])
+def get_question_by_id(question_id):
+    question = Question.query.get(question_id)
+    if not question:
+        return jsonify({"message": "질문을 찾을 수 없습니다."}), 404
+
+    return jsonify({
+        "id": question.id,
+        "title": question.title,
+        "image_url": question.image.url if question.image else None,
+        "sqe": question.sqe,
+        "is_active": question.is_active,
+        "created_at": question.created_at.isoformat(),
+        "updated_at": question.updated_at.isoformat()
+    }), 200
