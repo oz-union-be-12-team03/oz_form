@@ -1,21 +1,6 @@
-from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
+from config import db
+from app.models import Choice
 from flask import Blueprint, request, jsonify
-
-db = SQLAlchemy()
-
-
-
-    id = db.Column(db.Integer, primary_key=True)
-    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'), nullable=False)
-    content = db.Column(db.String(255), nullable=False)
-    sqe = db.Column(db.Integer, nullable=False)
-    is_active = db.Column(db.Boolean, default=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
-
-    question = db.relationship('Question', back_populates='choices')
-    answers = db.relationship('Answer', back_populates='choice')
 
 # 블루프린트 생성
 choices_blp = Blueprint('choices', __name__, url_prefix='/choices')
