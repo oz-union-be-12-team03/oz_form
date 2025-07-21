@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+db = SQLAlchemy() #3팀 화이팅
 
 class Answer(db.Model):
     __tablename__ ='answers'
