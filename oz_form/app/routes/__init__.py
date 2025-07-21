@@ -1,12 +1,26 @@
-# 각 route에서 블루프린트를 만들어주세요
-# stats_routes_blp를 참고해주시면 됩니다!
-from .answers import answers_blp
-from .choices import choices_blp
-from .questions import questions_blp
-from .stats_routes import stats_routes_blp
-from .users import user_blp
-from .images import images_blp
+from flask import Flask, jsonify
+from flask_migrate import Migrate
+
+from app.routes import register_routes
+from config import db
+
+migrate = Migrate()
 
 
-def register_routes(application):
-		# 코드를 작성해주세요
+def create_app():
+	application = Flask(__name__)
+	application.config.from_object("config.Config")
+	application.secret_key = "oz_form_secret"
+
+	db.init_app(application)
+	migrate.init_app(application, db)
+
+	@application.errorhandler(400)
+	def handle_bad_request(error):
+		response = jsonify({"message": error.description})
+		response.status_code = 400
+		return response
+
+	register_routes(application)
+
+	return application
