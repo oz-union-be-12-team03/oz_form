@@ -2,10 +2,10 @@ from flask import Blueprint, jsonify, request
 from app.models import User
 from config import db
 
-users_blp = Blueprint("users", __name__)
+user_blp = Blueprint("users", __name__)
 
 # 사용자 생성
-@users_blp.route("/users", methods=["POST"])
+@user_blp.route("/users", methods=["POST"])
 def create_user():
     data = request.get_json()
 
@@ -28,7 +28,7 @@ def create_user():
     return jsonify({"message": "사용자가 생성되었습니다.", "user_id": new_user.id}), 201
 
 # 전체 사용자 조회
-@users_blp.route("/users", methods=["GET"])
+@user_blp.route("/users", methods=["GET"])
 def get_all_users():
     users = User.query.all()
     result = [
@@ -45,7 +45,7 @@ def get_all_users():
     return jsonify(result), 200
 
 # 특정 사용자 조회
-@users_blp.route("/users/<int:user_id>", methods=["GET"])
+@user_blp.route("/users/<int:user_id>", methods=["GET"])
 def get_user(user_id):
     user = User.query.get(user_id)
     if not user:
