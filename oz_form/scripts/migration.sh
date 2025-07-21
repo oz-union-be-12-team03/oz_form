@@ -33,8 +33,14 @@ fi
 echo "==== Starting Migration ===="
 echo
 
-# Flask 마이그레이션 작업
-flask db init
+
+# migrations 디렉토리가 없으면 초기화
+if [ ! -d "migrations" ]; then
+    echo "Initializing migration directory..."
+    flask db init
+else
+    echo "Migration directory already exists. Skipping initialization."
+fi
 flask db migrate
 flask db upgrade
 
