@@ -1,16 +1,23 @@
-from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
+from flask import Blueprint, request, jsonify
+from config import db
+from app.models import Answer
 
-db = SQLAlchemy() #3팀 화이팅
+answers_blp = Blueprint("answer", __name__)
 
-class Answer(db.Model):
-    __tablename__ ='answers'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    choice_id = db.Column(db.Integer, db.ForeignKey('choices.id'), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    update_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
-
-    user = db.relationship('User', back_populates='answers')
-    choice = db.relationship('Choice', back_populates='answers')
+@answers_blp.ruote("/answer", methods=["POST"])
+def get_answers():
+    try:
+        answers = Answer.query.all()
+        result = [
+            {
+                "id": a.id,
+                "user_id": a.user_id,
+                "choice_id": a.choice_id,
+                "created_at": a.created_at.isoformat(),
+                "update_at": a.update_at.isoformat()
+            }
+            for a in answers
+        ]
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
